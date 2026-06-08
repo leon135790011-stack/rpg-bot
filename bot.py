@@ -106,7 +106,7 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def cmd_create(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = context.args
     if len(args) < 2:
-        await update.message.reply_text("❌ `!создать Имя класс`\nКлассы: воин, маг, лучник", parse_mode="Markdown")
+        await update.message.reply_text("❌ `/create Имя класс`\nКлассы: воин, маг, лучник", parse_mode="Markdown")
         return
     name = args[0]
     cls = args[1].lower()
@@ -114,7 +114,7 @@ async def cmd_create(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("❌ Классы: воин, маг, лучник")
         return
     if get_player(update.effective_chat.id, update.effective_user.id):
-        await update.message.reply_text("❌ Уже есть персонаж. `!сброс` для удаления.", parse_mode="Markdown")
+        await update.message.reply_text("❌ Уже есть персонаж. `/reset` для удаления.", parse_mode="Markdown")
         return
     base = CLASSES[cls]
     p = {
@@ -136,7 +136,7 @@ async def cmd_create(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def cmd_stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     p = get_player(update.effective_chat.id, update.effective_user.id)
     if not p:
-        await update.message.reply_text("❌ Создайте персонажа: `!создать Имя класс`", parse_mode="Markdown")
+        await update.message.reply_text("❌ Создайте персонажа: `/create Имя класс`", parse_mode="Markdown")
         return
     eff = get_effective_stats(p)
     emoji = CLASSES[p["class"]]["emoji"]
@@ -153,7 +153,7 @@ async def cmd_stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def cmd_inv(update: Update, context: ContextTypes.DEFAULT_TYPE):
     p = get_player(update.effective_chat.id, update.effective_user.id)
     if not p:
-        await update.message.reply_text("❌ Создайте персонажа: `!создать Имя класс`", parse_mode="Markdown")
+        await update.message.reply_text("❌ Создайте персонажа: `/create Имя класс`", parse_mode="Markdown")
         return
     text = f"🎒 *Инвентарь {p['name']}* | 💰 {p['gold']} золота\n\n"
     text += f"🗡️ Оружие: *{p['weapon']}*\n🛡️ Броня: *{p['armor']}*\n\n"
@@ -162,7 +162,7 @@ async def cmd_inv(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         text += "*Предметы:*\n"
         for i, item in enumerate(p["inventory"], 1):
-            text += f"{i}. {item['name']} ({item['type']}) — `!экип {i}`\n"
+            text += f"{i}. {item['name']} ({item['type']}) — `/equip {i}`\n"
     await update.message.reply_text(text, parse_mode="Markdown")
 
 async def cmd_shop(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -186,18 +186,18 @@ async def cmd_shop(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text += f"{len(shop)}. {name} — {data['price']}💰 | {data['desc']}\n"
     p["_shop"] = shop
     set_player(update.effective_chat.id, update.effective_user.id, p)
-    text += "\n`!купить N` — купить предмет"
+    text += "\n`/buy N` — купить предмет"
     await update.message.reply_text(text, parse_mode="Markdown")
 
 async def cmd_buy(update: Update, context: ContextTypes.DEFAULT_TYPE):
     p = get_player(update.effective_chat.id, update.effective_user.id)
     if not p or "_shop" not in p:
-        await update.message.reply_text("❌ Сначала `!магазин`", parse_mode="Markdown")
+        await update.message.reply_text("❌ Сначала `/shop`", parse_mode="Markdown")
         return
     try:
         idx = int(context.args[0]) - 1
     except:
-        await update.message.reply_text("❌ `!купить N`", parse_mode="Markdown")
+        await update.message.reply_text("❌ `/buy N`", parse_mode="Markdown")
         return
     if idx < 0 or idx >= len(p["_shop"]):
         await update.message.reply_text("❌ Неверный номер")
@@ -209,7 +209,7 @@ async def cmd_buy(update: Update, context: ContextTypes.DEFAULT_TYPE):
     p["gold"] -= item["price"]
     p["inventory"].append({"name": item["name"], "type": item["type"]})
     set_player(update.effective_chat.id, update.effective_user.id, p)
-    await update.message.reply_text(f"✅ Куплено: *{item['name']}*\nНадеть: `!экип {len(p['inventory'])}`", parse_mode="Markdown")
+    await update.message.reply_text(f"✅ Куплено: *{item['name']}*\nНадеть: `/equip {len(p['inventory'])}`", parse_mode="Markdown")
 
 async def cmd_equip(update: Update, context: ContextTypes.DEFAULT_TYPE):
     p = get_player(update.effective_chat.id, update.effective_user.id)
@@ -219,7 +219,7 @@ async def cmd_equip(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         idx = int(context.args[0]) - 1
     except:
-        await update.message.reply_text("❌ `!экип N`", parse_mode="Markdown")
+        await update.message.reply_text("❌ `/equip N`", parse_mode="Markdown")
         return
     if idx < 0 or idx >= len(p["inventory"]):
         await update.message.reply_text("❌ Неверный номер")
@@ -326,7 +326,7 @@ async def cmd_monster(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if gid in pve_state and pve_state[gid]["active"]:
         m = pve_state[gid]["monster"]
         await update.message.reply_text(
-            f"{m['emoji']} *{m['name']}*\n❤️ HP: {m['hp']}\n⚔️ Атака: {m['attack']} | 🛡️ Защита: {m['defense']}\n👥 Атаковало: {len(pve_state[gid]['attackers'])}\n\n`!удар` — атаковать!",
+            f"{m['emoji']} *{m['name']}*\n❤️ HP: {m['hp']}\n⚔️ Атака: {m['attack']} | 🛡️ Защита: {m['defense']}\n👥 Атаковало: {len(pve_state[gid]['attackers'])}\n\n`/hit` — атаковать!",
             parse_mode="Markdown"
         )
     else:
@@ -388,7 +388,7 @@ async def pve_callback(context: ContextTypes.DEFAULT_TYPE):
             try:
                 await context.bot.send_message(
                     int(gid_str),
-                    f"⚠️ *Вторжение!* {m['emoji']} *{m['name']}*!\n❤️ HP: {m['hp']} | ⚔️ Атака: {m['attack']}\n💥 `!удар` — атаковать!",
+                    f"⚠️ *Вторжение!* {m['emoji']} *{m['name']}*!\n❤️ HP: {m['hp']} | ⚔️ Атака: {m['attack']}\n💥 `/hit` — атаковать!",
                     parse_mode="Markdown"
                 )
             except:
@@ -401,18 +401,18 @@ def main():
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", cmd_start))
-app.add_handler(CommandHandler("create", cmd_create))
-app.add_handler(CommandHandler("stats", cmd_stats))
-app.add_handler(CommandHandler("inv", cmd_inv))
-app.add_handler(CommandHandler("shop", cmd_shop))
-app.add_handler(CommandHandler("buy", cmd_buy))
-app.add_handler(CommandHandler("equip", cmd_equip))
-app.add_handler(CommandHandler("attack", cmd_attack))
-app.add_handler(CommandHandler("hit", cmd_hit))
-app.add_handler(CommandHandler("monster", cmd_monster))
-app.add_handler(CommandHandler("heal", cmd_heal))
-app.add_handler(CommandHandler("top", cmd_top))
-app.add_handler(CommandHandler("reset", cmd_reset))
+    app.add_handler(CommandHandler("create", cmd_create))
+    app.add_handler(CommandHandler("stats", cmd_stats))
+    app.add_handler(CommandHandler("inv", cmd_inv))
+    app.add_handler(CommandHandler("shop", cmd_shop))
+    app.add_handler(CommandHandler("buy", cmd_buy))
+    app.add_handler(CommandHandler("equip", cmd_equip))
+    app.add_handler(CommandHandler("attack", cmd_attack))
+    app.add_handler(CommandHandler("hit", cmd_hit))
+    app.add_handler(CommandHandler("monster", cmd_monster))
+    app.add_handler(CommandHandler("heal", cmd_heal))
+    app.add_handler(CommandHandler("top", cmd_top))
+    app.add_handler(CommandHandler("reset", cmd_reset))
 
     app.job_queue.run_repeating(pve_callback, interval=PVE_INTERVAL, first=10)
     app.add_error_handler(error_handler)
