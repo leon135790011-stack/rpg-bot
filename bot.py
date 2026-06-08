@@ -88,18 +88,18 @@ def exp_to_level(level):
 async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "🎲 *РПГ-бот v2.0*\n\n"
-        "`!создать Имя класс` — создать персонажа\n"
-        "`!перс` — характеристики\n"
-        "`!attack` (ответом) — PvP\n"
-        "`!удар` — атаковать монстра\n"
-        "`!монстр` — статус монстра\n"
-        "`!инв` — инвентарь\n"
-        "`!магазин` — купить снаряжение\n"
-        "`!купить N` — купить предмет\n"
-        "`!экип N` — надеть предмет\n"
-        "`!лечить` — восстановить HP\n"
-        "`!топ` — рейтинг\n"
-        "`!сброс` — удалить персонажа",
+        "`/create Имя класс` — создать персонажа\n"
+        "`/stats` — характеристики\n"
+        "`/attack` (ответом) — PvP\n"
+        "`/hit` — атаковать монстра\n"
+        "`/monster` — статус монстра\n"
+        "`/inv` — инвентарь\n"
+        "`/shop` — купить снаряжение\n"
+        "`/buy N` — купить предмет\n"
+        "`/equip N` — надеть предмет\n"
+        "`/heal` — восстановить HP\n"
+        "`/top` — рейтинг\n"
+        "`/reset` — удалить персонажа",
         parse_mode="Markdown"
     )
 
@@ -401,18 +401,18 @@ def main():
     app = Application.builder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", cmd_start))
-    app.add_handler(CommandHandler("создать", cmd_create))
-    app.add_handler(CommandHandler("перс", cmd_stats))
-    app.add_handler(CommandHandler("инв", cmd_inv))
-    app.add_handler(CommandHandler("магазин", cmd_shop))
-    app.add_handler(CommandHandler("купить", cmd_buy))
-    app.add_handler(CommandHandler("экип", cmd_equip))
-    app.add_handler(CommandHandler("attack", cmd_attack))
-    app.add_handler(CommandHandler("удар", cmd_hit))
-    app.add_handler(CommandHandler("монстр", cmd_monster))
-    app.add_handler(CommandHandler("лечить", cmd_heal))
-    app.add_handler(CommandHandler("топ", cmd_top))
-    app.add_handler(CommandHandler("сброс", cmd_reset))
+app.add_handler(CommandHandler("create", cmd_create))
+app.add_handler(CommandHandler("stats", cmd_stats))
+app.add_handler(CommandHandler("inv", cmd_inv))
+app.add_handler(CommandHandler("shop", cmd_shop))
+app.add_handler(CommandHandler("buy", cmd_buy))
+app.add_handler(CommandHandler("equip", cmd_equip))
+app.add_handler(CommandHandler("attack", cmd_attack))
+app.add_handler(CommandHandler("hit", cmd_hit))
+app.add_handler(CommandHandler("monster", cmd_monster))
+app.add_handler(CommandHandler("heal", cmd_heal))
+app.add_handler(CommandHandler("top", cmd_top))
+app.add_handler(CommandHandler("reset", cmd_reset))
 
     app.job_queue.run_repeating(pve_callback, interval=PVE_INTERVAL, first=10)
     app.add_error_handler(error_handler)
