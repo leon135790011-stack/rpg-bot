@@ -1,13 +1,13 @@
 import random
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import Application, CommandHandler, ContextTypes
 
 # ---------- НАСТРОЙКИ ----------
 TOKEN = "8952729637:AAH4_8HovY5axd2SM96QHwzbi6My5wup2WY"  # <-- ЗАМЕНИ НА СВОЙ ТОКЕН
-PVE_INTERVAL = 3 * 3600  # 3 часа
+PVE_INTERVAL = 3 * 3600
 
 PLAYERS_FILE = "players.json"
 
@@ -50,7 +50,6 @@ MONSTERS = [
     {"name": "Демон",        "hp": 200, "attack": 35, "defense": 15,"exp": 220, "gold": 220,"emoji": "😈"},
 ]
 
-# Загрузка/сохранение
 def load_json(path):
     if os.path.exists(path):
         with open(path, "r", encoding="utf-8") as f:
@@ -85,8 +84,6 @@ def set_player(group_id, user_id, data):
 
 def exp_to_level(level):
     return 50 + level * 30
-
-# ---------- КОМАНДЫ ----------
 
 async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
@@ -400,7 +397,6 @@ async def pve_callback(context: ContextTypes.DEFAULT_TYPE):
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print(f"Ошибка: {context.error}")
 
-# ---------- ЗАПУСК ----------
 def main():
     app = Application.builder().token(TOKEN).build()
 
@@ -421,7 +417,7 @@ def main():
     app.job_queue.run_repeating(pve_callback, interval=PVE_INTERVAL, first=10)
     app.add_error_handler(error_handler)
 
-    print("🔥 РПГ-бот v2.0 запущен!")
+    print("РПГ-бот v2.0 запущен!")
     app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == "__main__":
