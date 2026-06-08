@@ -6,7 +6,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 # ---------- НАСТРОЙКИ ----------
-TOKEN = "ВАШ_ТОКЕН_ОТ_BOTFATHER"  # <-- ЗАМЕНИ НА СВОЙ ТОКЕН
+TOKEN = "8350483157:AAGn8MgX8W5FJwZvB6ptvKSXrGVUarHXbZA"  # <-- ЗАМЕНИ НА СВОЙ ТОКЕН
 PVE_INTERVAL = 3 * 3600  # 3 часа
 
 PLAYERS_FILE = "players.json"
