@@ -360,4 +360,4 @@ def main():
     app.job_queue.run_repeating(pve_callback, interval=PVE_INTERVAL, first=10)
     app.add_error_handler(error_handler)
 
-    print("РПГ-бот v2.0 зап
+    print("РПГ-бот v2.0 запущен!")
