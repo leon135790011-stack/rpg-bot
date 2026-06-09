@@ -1,60 +1,3 @@
-import random
-import json
-import os
-from datetime import datetime
-from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
-
-# ---------- НАСТРОЙКИ ----------
-TOKEN = "8952729637:AAH4_8HovY5axd2SM96QHwzbi6My5wup2WY"  # <-- ЗАМЕНИ НА СВОЙ ТОКЕН
-PVE_INTERVAL = 3 * 3600
-
-PLAYERS_FILE = "players.json"
-
-CLASSES = {
-    "воин":  {"hp": 120, "attack": 15, "defense": 10, "emoji": "⚔️", "weapon": "ржавый меч", "armor": "кожаная броня"},
-    "маг":   {"hp": 80,  "attack": 25, "defense": 4,  "emoji": "🔮", "weapon": "деревянный посох", "armor": "тканевая роба"},
-    "лучник":{"hp": 90,  "attack": 18, "defense": 6,  "emoji": "🏹", "weapon": "короткий лук", "armor": "стеганый доспех"},
-}
-
-WEAPONS = {
-    "ржавый меч":      {"attack": 0,  "price": 0,   "desc": "Стартовое оружие воина"},
-    "деревянный посох": {"attack": 0,  "price": 0,   "desc": "Стартовое оружие мага"},
-    "короткий лук":     {"attack": 0,  "price": 0,   "desc": "Стартовое оружие лучника"},
-    "стальной меч":     {"attack": 8,  "price": 120, "desc": "+8 к атаке (воин)", "class": "воин"},
-    "двуручный топор":  {"attack": 12, "price": 200, "desc": "+12 атаки, -3 защиты (воин)", "class": "воин", "defense_penalty": 3},
-    "магический жезл":  {"attack": 10, "price": 150, "desc": "+10 к атаке (маг)", "class": "маг"},
-    "посох стихий":     {"attack": 14, "price": 250, "desc": "+14 к атаке (маг)", "class": "маг"},
-    "длинный лук":      {"attack": 9,  "price": 130, "desc": "+9 к атаке (лучник)", "class": "лучник"},
-    "арбалет":          {"attack": 11, "price": 180, "desc": "+11 к атаке (лучник)", "class": "лучник"},
-}
-
-ARMORS = {
-    "кожаная броня":    {"defense": 0, "price": 0,   "desc": "Стартовая броня"},
-    "тканевая роба":    {"defense": 0, "price": 0,   "desc": "Стартовая броня"},
-    "стеганый доспех":  {"defense": 0, "price": 0,   "desc": "Стартовая броня"},
-    "кольчуга":         {"defense": 6, "price": 100, "desc": "+6 к защите"},
-    "латный доспех":    {"defense": 10,"price": 220, "desc": "+10 защиты, -2 атаки", "attack_penalty": 2},
-    "магическая мантия":{"defense": 5, "price": 140, "desc": "+5 защиты, +3 атаки (маг)", "attack_bonus": 3, "class": "маг"},
-    "эльфийский плащ":  {"defense": 7, "price": 160, "desc": "+7 защиты, +2 атаки (лучник)", "attack_bonus": 2, "class": "лучник"},
-}
-
-MONSTERS = [
-    {"name": "Гоблин",       "hp": 40,  "attack": 8,  "defense": 2, "exp": 30,  "gold": 15, "emoji": "👺"},
-    {"name": "Скелет",       "hp": 55,  "attack": 12, "defense": 4, "exp": 45,  "gold": 25, "emoji": "💀"},
-    {"name": "Орк",          "hp": 80,  "attack": 15, "defense": 6, "exp": 60,  "gold": 40, "emoji": "👹"},
-    {"name": "Тёмный маг",   "hp": 60,  "attack": 22, "defense": 3, "exp": 75,  "gold": 55, "emoji": "🧙‍♂️"},
-    {"name": "Волк-оборотень","hp": 100,"attack": 18, "defense": 7, "exp": 90,  "gold": 70, "emoji": "🐺"},
-    {"name": "Элементаль",   "hp": 120, "attack": 25, "defense": 10,"exp": 120, "gold": 100,"emoji": "🔥"},
-    {"name": "Драконид",     "hp": 150, "attack": 30, "defense": 12,"exp": 160, "gold": 150,"emoji": "🐉"},
-    {"name": "Демон",        "hp": 200, "attack": 35, "defense": 15,"exp": 220, "gold": 220,"emoji": "😈"},
-]
-
-def load_json(path):
-    if os.path.exists(path):
-        with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {}
 
 def save_json(path, data):
     with open(path, "w", encoding="utf-8") as f:
@@ -417,8 +360,4 @@ def main():
     app.job_queue.run_repeating(pve_callback, interval=PVE_INTERVAL, first=10)
     app.add_error_handler(error_handler)
 
-    print("РПГ-бот v2.0 запущен!")
-    app.run_polling(allowed_updates=Update.ALL_TYPES)
-
-if __name__ == "__main__":
-    main()
+    print("РПГ-бот v2.0 зап
